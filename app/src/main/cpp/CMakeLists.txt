@@ -20,10 +20,34 @@ add_library( # Sets the name of the library.
              native-lib.cpp )
 
 include_directories(include)
+
 add_library(avcodec SHARED IMPORTED)
 set_target_properties(avcodec
         PROPERTIES IMPORTED_LOCATION
         ${ROOT_DIR}/app/libs/${ANDROID_ABI}/libavcodec.so)
+
+add_library(avformat SHARED IMPORTED)
+set_target_properties(avformat
+        PROPERTIES IMPORTED_LOCATION
+        ${ROOT_DIR}/app/libs/${ANDROID_ABI}/libavformat.so)
+
+add_library(avutil SHARED IMPORTED)
+set_target_properties(avutil
+        PROPERTIES IMPORTED_LOCATION
+        ${ROOT_DIR}/app/libs/${ANDROID_ABI}/libavutil.so)
+
+add_library(swscale SHARED IMPORTED)
+set_target_properties(swscale
+        PROPERTIES IMPORTED_LOCATION
+        ${ROOT_DIR}/app/libs/${ANDROID_ABI}/libswscale.so)
+
+add_library(swresample SHARED IMPORTED)
+set_target_properties(swresample
+        PROPERTIES IMPORTED_LOCATION
+        ${ROOT_DIR}/app/libs/${ANDROID_ABI}/libswresample.so)
+#link_directories(${ROOT_DIR}/app/libs/${ANDROID_ABI}/)  不行
+
+#link_libraries(${ROOT_DIR}/app/libs/${ANDROID_ABI}/libavcodec.so) 不行
 
 # Searches for a specified prebuilt library and stores the path as a
 # variable. Because CMake includes system libraries in the search path by
@@ -45,9 +69,9 @@ find_library( # Sets the name of the path variable.
 
 target_link_libraries( # Specifies the target library.
                        native-lib
-
+                       android OpenSLES
                        # 链接其他动态库
-                       avcodec
+                       avcodec avformat avutil swscale swresample
                        # Links the target library to the log library
                        # included in the NDK.
                        ${log-lib} )
